@@ -12,8 +12,8 @@ DOCKER_IP=$(ip addr show docker0 | grep 'inet ' |  awk '{ print $2}')
 echo "DOCKER IP : $DOCKER_IP"
 
 # create two redis instances
-docker run --name redis_0 -t -d -i redis:4.0 
-docker run --name redis_1 -t -d -i redis:4.0
+docker run --rm --name redis_0 -t -d -i redis:4.0 
+docker run --rm --name redis_1 -t -d -i redis:4.0
 
 #get master ip
 REDIS_0_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' redis_0)
@@ -23,8 +23,8 @@ echo "REDIS_0_IP : $REDIS_0_IP"
 echo "REDIS_1_IP : $REDIS_1_IP"
 
 # start up the sentinels
-docker run --name sentinel_0 -v $(pwd)/sentinel_0.conf:/srv/sentinel.conf -tdi redis:4.0 redis-sentinel /srv/sentinel.conf 
-docker run --name sentinel_1 -v $(pwd)/sentinel_1.conf:/srv/sentinel.conf -tdi redis:4.0 redis-sentinel /srv/sentinel.conf 
+docker run --rm --name sentinel_0 -v $(pwd)/sentinel_0.conf:/srv/sentinel.conf -tdi redis:4.0 redis-sentinel /srv/sentinel.conf 
+docker run --rm --name sentinel_1 -v $(pwd)/sentinel_1.conf:/srv/sentinel.conf -tdi redis:4.0 redis-sentinel /srv/sentinel.conf 
 #docker run --name sentinel_2 -v $(pwd)/sentinel.conf:/srv/sentinel.conf -tdi redis:4.0 redis-sentinel /srv/sentinel.conf 
 
 #get sentinel ips
